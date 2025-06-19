@@ -1,0 +1,221 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday, Goldi 🎉</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+  background: #000;
+  color: #fff;
+}
+
+.background {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: -3;
+  transition: background-image 1s ease-in-out;
+}
+
+.overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: -2;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100%;
+  padding: 2rem;
+  z-index: 2;
+  position: relative;
+}
+
+.message {
+  font-size: 1.6rem;
+  max-width: 800px;
+  line-height: 1.8;
+  white-space: pre-line;
+  text-shadow: 2px 2px 6px #000;
+  z-index: 2;
+  position: relative;
+}
+
+.replay-button {
+  position: absolute;
+  bottom: 30px;
+  background: #ff69b4;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 15px #ffc107;
+  display: none;
+  animation: bounce 1.2s infinite;
+  z-index: 3;
+}
+
+.replay-button::before {
+  content: "🎂";
+  font-size: 1.5rem;
+  margin-right: 8px;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.confetti, .balloon, .cake {
+  position: absolute;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.confetti {
+  width: 8px;
+  height: 8px;
+  background-color: gold;
+  opacity: 0.8;
+  border-radius: 50%;
+  animation: fall linear infinite;
+}
+
+.balloon, .cake {
+  font-size: 1.8rem;
+  animation: floatUp linear infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(110vh);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-100vh);
+    opacity: 0;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="background" id="bg"></div>
+  <div class="overlay"></div>  <div class="container">
+    <div class="message" id="message"></div>
+    <button class="replay-button" id="replayBtn">Replay</button>
+  </div>  <script>
+    const slides = [
+      "Hey Goldi \u2728\nToday the world shines a little brighter...\nBecause it’s your day \ud83d\udc9b",
+      "I’ve always felt that your name suits you perfectly —\nYou really are golden in the way you light up the people around you.",
+      "You’re not just my cousin...\nYou were the first girl I could be completely myself with.",
+      "You have a glow — not just in your smile,\nBut in the way you make others feel seen and safe \ud83c\udf1f",
+      "Like sunshine through a window,\nYou bring quiet warmth into every moment \u2600\ufe0f",
+      "With you, I never had to pretend.\nNo filters. No pressure. Just comfort.",
+      "You may not realize it...\nBut just your presence has meant a lot more to me than I ever said.",
+      "You’ve been a calm in the chaos,\nAnd a light when things felt a bit dull. \ud83d\udcab",
+      "On your birthday, I just want to say:\nThank you for being golden — inside and out.",
+      "I’m so grateful for you — not just as family,\nBut as a rare kind of friend \ud83d\udc96",
+      "Happy Birthday, Goldi.\nMay your life shine even brighter than your name \ud83c\udf3c\n– With love,\nDipak \ud83d\udc9b"
+    ];
+
+    const images = [
+      'goldi1.jpg', 'goldi2.jpg', 'goldi3.jpg', 'goldi4.jpg', 'goldi5.jpg',
+      'goldi6.jpg', 'goldi7.jpg', 'goldi8.jpg', 'goldi9.jpg', 'goldi10.jpg',
+      'goldi11.jpg'
+    ];
+
+    let index = 0;
+    const messageEl = document.getElementById("message");
+    const bg = document.getElementById("bg");
+    const replayBtn = document.getElementById("replayBtn");
+
+    function typeWriter(text, i = 0, callback) {
+      if (i === 0) messageEl.innerHTML = "";
+      if (i < text.length) {
+        messageEl.innerHTML += text.charAt(i) === "\n" ? "<br>" : text.charAt(i);
+        setTimeout(() => typeWriter(text, i + 1, callback), 40);
+      } else if (callback) {
+        callback();
+      }
+    }
+
+    function showSlide(i) {
+      if (i < slides.length) {
+        bg.style.backgroundImage = `url('${images[i]}')`;
+        typeWriter(slides[i], 0, () => {
+          setTimeout(() => {
+            index++;
+            showSlide(index);
+          }, 5500);
+        });
+      } else {
+        replayBtn.style.display = "block";
+      }
+    }
+
+    replayBtn.addEventListener("click", () => {
+      index = 0;
+      replayBtn.style.display = "none";
+      showSlide(index);
+    });
+
+    function createConfetti(count = 100) {
+      for (let i = 0; i < count; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.left = `${Math.random() * 100}%`;
+        confetti.style.animationDuration = `${3 + Math.random() * 3}s`;
+        confetti.style.backgroundColor = ['#ff0', '#f0f', '#0ff', '#fff'][Math.floor(Math.random() * 4)];
+        document.body.appendChild(confetti);
+      }
+    }
+
+    function createFloatingItems(count = 20) {
+      const emojis = ['\ud83c\udf88', '\ud83c\udf82']; // balloon, cake
+      for (let i = 0; i < count; i++) {
+        const span = document.createElement("div");
+        span.classList.add(i % 2 === 0 ? "balloon" : "cake");
+        span.innerText = emojis[i % 2];
+        span.style.left = `${Math.random() * 100}%`;
+        span.style.fontSize = `${1.4 + Math.random() * 1.2}rem`;
+        span.style.animationDuration = `${5 + Math.random() * 5}s`;
+        document.body.appendChild(span);
+      }
+    }
+
+    createConfetti();
+    createFloatingItems();
+    showSlide(index);
+  </script></body>
+                                    </html>
